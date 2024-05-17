@@ -1,6 +1,7 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'arxiv notification for feishu bot action'
+description:
+  'Collect arxiv papers everyday and send it to feishu as annoucement'
+author: 'junka'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
@@ -9,15 +10,21 @@ branding:
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  webhook:
+    description: 'feishu bot webhook url'
     required: true
-    default: '1000'
+  signkey:
+    description: 'set when you enable signature verify'
+    required: false
+  keyword:
+    description: 'fields you care about'
+    required: true
+    default: 'cvpr'
 
 # Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  status:
+    description: 'response status'
 
 runs:
   using: node20
