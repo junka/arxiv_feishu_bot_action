@@ -28437,7 +28437,7 @@ async function getArXivPapers(keyword) {
         const papers = response.data.feed.entry.map((entry) => ({
             id: entry.id,
             title: entry.title,
-            authors: entry.author.map((author) => author.name),
+            author: entry.author.map((author) => author.name),
             published: entry.published,
             doi: entry.doi,
             summary: entry.summary
@@ -28491,7 +28491,7 @@ const crypto = __importStar(__nccwpck_require__(6113));
 const arxiv_1 = __importDefault(__nccwpck_require__(4733));
 const https = __importStar(__nccwpck_require__(5687));
 function PostToFeishu(id, content) {
-    var options = {
+    const options = {
         hostname: 'open.feishu.cn',
         port: 443,
         path: `/open-apis/bot/v2/hook/${id}`,
@@ -28500,7 +28500,7 @@ function PostToFeishu(id, content) {
             'Content-Type': 'application/json'
         }
     };
-    var req = https.request(options, res => {
+    const req = https.request(options, res => {
         res.on('data', d => {
             process.stdout.write(d);
         });
@@ -28530,31 +28530,28 @@ async function run() {
         core.debug(`keyword is ${kw}`);
         // Log the current timestamp, wait, then log the new timestamp
         core.debug(new Date().toTimeString());
-        (0, arxiv_1.default)(kw).then(papers => {
-            console.log(papers);
-            const json = JSON.stringify(papers);
-            const tm = Math.floor(Date.now() / 1000);
-            const sign = sign_with_timestamp(tm, signKey);
-            const msg = `{
-        "timestamp": "${tm}",
-        "sign": "${sign}",
-        "msg_type": "interactive",
-            "card": {
-                "type": "template",
-                "data": {
-                    "template_id": "AAq3wZkpfCpBZ",
-                    "template_version_name": "1.0.0",
-                    "template_variable": {
-                        "papers_list": ${json}
-                    }
-                }
-            }
-        }`;
-            PostToFeishu(webhookId, msg);
-        });
+        const papers = await (0, arxiv_1.default)(kw);
+        console.log(papers);
+        const json = JSON.stringify(papers);
+        const tm = Math.floor(Date.now() / 1000);
+        const sign = sign_with_timestamp(tm, signKey);
+        const msg = `{
+      "timestamp": "${tm}",
+      "sign": "${sign}",
+      "msg_type": "interactive",
+          "card": {
+              "type": "template",
+              "data": {
+                  "template_id": "AAq3wZkpfCpBZ",
+                  "template_version_name": "1.0.0",
+                  "template_variable": {
+                      "papers_list": ${json}
+                  }
+              }
+          }
+      }`;
+        PostToFeishu(webhookId, msg);
         core.debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        core.setOutput('time', new Date().toTimeString());
     }
     catch (error) {
         // Fail the workflow run if an error occurs

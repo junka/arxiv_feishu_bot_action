@@ -21,11 +21,6 @@ inputs:
     required: true
     default: 'cvpr'
 
-# Define your outputs here.
-outputs:
-  status:
-    description: 'response status'
-
 runs:
   using: node20
   main: dist/index.js

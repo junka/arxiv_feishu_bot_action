@@ -19,7 +19,7 @@ export default async function getArXivPapers(
     const papers: ArXivPaper[] = response.data.feed.entry.map((entry: any) => ({
       id: entry.id,
       title: entry.title,
-      authors: entry.author.map((author: any) => author.name),
+      author: entry.author.map((author: any) => author.name),
       published: entry.published,
       doi: entry.doi,
       summary: entry.summary

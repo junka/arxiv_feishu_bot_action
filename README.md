@@ -1,4 +1,6 @@
-## Github action sending arxiv papers to feishu everyday
+# GitHub action
+
+## sending arxiv papers to feishu everyday
 
 [![GitHub Super-Linter](https://github.com/junka/arxiv_feishu_bot_action/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/junka/arxiv_feishu_bot_action/actions/workflows/ci.yml/badge.svg)

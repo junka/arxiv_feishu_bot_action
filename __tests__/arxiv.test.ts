@@ -50,7 +50,7 @@ describe('arxiv.ts', () => {
       {
         id: 'http://arxiv.org/abs/2305.01234',
         title: 'Paper 1',
-        authors: ['Author 1', 'Author 2'],
+        author: ['Author 1', 'Author 2'],
         published: '2024-05-17T12:00:00Z',
         doi: '10.1234/abc',
         summary: 'This is the summary of Paper 1.'
@@ -58,7 +58,7 @@ describe('arxiv.ts', () => {
       {
         id: 'http://arxiv.org/abs/2305.05678',
         title: 'Paper 2',
-        authors: ['Author 3'],
+        author: ['Author 3'],
         published: '2024-05-17T13:00:00Z',
         doi: '10.1234/def',
         summary: 'This is the summary of Paper 2.'
@@ -80,7 +80,7 @@ describe('arxiv.ts', () => {
       }
     })
 
-    await expect(getArXivPapers(keyword)).rejects.toThrowError(
+    await expect(getArXivPapers(keyword)).rejects.toThrow(
       'Can not fetch papers'
     )
     expect(mockedAxios.get).toHaveBeenCalledTimes(1)
