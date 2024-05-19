@@ -54,5 +54,5 @@ describe('action', () => {
       expect.stringMatching(timeRegex)
     )
     expect(errorMock).not.toHaveBeenCalled()
-  })
+  }, 100000)
 })

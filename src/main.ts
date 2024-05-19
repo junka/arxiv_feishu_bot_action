@@ -36,9 +36,13 @@ function sign_with_timestamp(timestamp: number, key: string): string {
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 export async function run(): Promise<void> {
-  const webhook = core.getInput('webhook') ? core.getInput('webhook') : ''
+  const webhook = core.getInput('webhook')
+    ? core.getInput('webhook')
+    : 'https://open.feishu.cn/open-apis/bot/v2/hook/cd316482-d7e0-41d0-b7fd-1a1255a44131'
 
-  const signKey = core.getInput('signkey') ? core.getInput('signkey') : ''
+  const signKey = core.getInput('signkey')
+    ? core.getInput('signkey')
+    : 'XbCuUmXemE0rRFvUwlVH2g'
 
   const webhookId = webhook.slice(webhook.indexOf('hook/') + 5)
   try {
@@ -46,32 +50,31 @@ export async function run(): Promise<void> {
 
     // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
     core.debug(`keyword is ${kw}`)
-
     // Log the current timestamp, wait, then log the new timestamp
     core.debug(new Date().toTimeString())
     const papers = await getArXivPapers(kw)
-    console.log(papers)
-    const json = JSON.stringify(papers)
-    const tm = Math.floor(Date.now() / 1000)
-    const sign = sign_with_timestamp(tm, signKey)
-    const msg = `{
-      "timestamp": "${tm}",
-      "sign": "${sign}",
-      "msg_type": "interactive",
-          "card": {
-              "type": "template",
-              "data": {
-                  "template_id": "AAq3wZkpfCpBZ",
-                  "template_version_name": "1.0.0",
-                  "template_variable": {
-                      "papers_list": ${json}
-                  }
-              }
-          }
-      }`
-    PostToFeishu(webhookId, msg)
-
-    core.debug(new Date().toTimeString())
+    if (papers.length > 0) {
+      const json = JSON.stringify(papers)
+      const tm = Math.floor(Date.now() / 1000)
+      const sign = sign_with_timestamp(tm, signKey)
+      const msg = `{
+        "timestamp": "${tm}",
+        "sign": "${sign}",
+        "msg_type": "interactive",
+            "card": {
+                "type": "template",
+                "data": {
+                    "template_id": "AAq3wZkpfCpBZ",
+                    "template_version_name": "1.0.3",
+                    "template_variable": {
+                        "keyword": "${kw}",
+                        "papers_list": ${json}
+                    }
+                }
+            }
+        }`
+      PostToFeishu(webhookId, msg)
+    }
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
