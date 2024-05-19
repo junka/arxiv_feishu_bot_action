@@ -32,9 +32,9 @@ jobs:
     name: Arxiv paper to feishu
     runs-on: ubuntu-latest
     steps:
-      uses: junka/arxiv_feishu_bot_action@main
-      with:
-        keyword: 'CVPR' # topics for you
-        webhook: ${{ secrets.FEISHU_BOT_WEBHOOK }}
-        signkey: ${{ secrets.FEISHU_BOT_SIGNKEY }}
+      - uses: junka/arxiv_feishu_bot_action@main
+        with:
+          keyword: 'CVPR' # topics for you
+          webhook: ${{ secrets.FEISHU_BOT_WEBHOOK }}
+          signkey: ${{ secrets.FEISHU_BOT_SIGNKEY }}
 ```
