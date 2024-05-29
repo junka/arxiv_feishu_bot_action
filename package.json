@@ -1,7 +1,7 @@
 {
   "name": "arxiv_feishu_bot_action",
   "description": "GitHub Action for send arxiv papers to feishu daily",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "junka",
   "private": true,
   "homepage": "https://github.com/junka/arxiv_feishu_bot_action",
@@ -79,6 +79,7 @@
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "@typescript-eslint/parser": "^7.9.0",
     "@vercel/ncc": "^0.38.1",
+    "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-plugin-github": "^4.10.2",
     "eslint-plugin-jest": "^28.5.0",

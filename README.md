@@ -38,3 +38,14 @@ jobs:
           webhook: ${{ secrets.FEISHU_BOT_WEBHOOK }}
           signkey: ${{ secrets.FEISHU_BOT_SIGNKEY }}
 ```
+
+## limitation
+
+## 限制
+
+Each message will contain 10 papers summary. Due to the limitation of feishu bot
+message rate which is 5 messages per second. So here you will only see the top
+50 papers if there are more than 50.
+
+每个消息展示10条论文概要。由于飞书消息限流限制，每秒最多只能发送5条消息，如果关
+注的论文超过了50条，那么只会展示前50条。

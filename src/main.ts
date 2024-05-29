@@ -38,11 +38,11 @@ function sign_with_timestamp(timestamp: number, key: string): string {
 export async function run(): Promise<void> {
   const webhook = core.getInput('webhook')
     ? core.getInput('webhook')
-    : 'https://open.feishu.cn/open-apis/bot/v2/hook/cd316482-d7e0-41d0-b7fd-1a1255a44131'
+    : process.env.FEISHU_BOT_WEBHOOK || ''
 
   const signKey = core.getInput('signkey')
     ? core.getInput('signkey')
-    : 'XbCuUmXemE0rRFvUwlVH2g'
+    : process.env.FEISHU_BOT_SIGNKEY || ''
 
   const webhookId = webhook.slice(webhook.indexOf('hook/') + 5)
   try {
@@ -52,9 +52,12 @@ export async function run(): Promise<void> {
     core.debug(`keyword is ${kw}`)
     // Log the current timestamp, wait, then log the new timestamp
     core.debug(new Date().toTimeString())
-    const papers = await getArXivPapers(kw)
-    if (papers.length > 0) {
-      const json = JSON.stringify(papers)
+    const [num, papers] = await getArXivPapers(kw)
+    let it = 0
+
+    while (it < papers.length) {
+      const json = JSON.stringify(papers.slice(it, it + 10))
+      it += 10
       const tm = Math.floor(Date.now() / 1000)
       const sign = sign_with_timestamp(tm, signKey)
       const msg = `{
@@ -65,9 +68,10 @@ export async function run(): Promise<void> {
                 "type": "template",
                 "data": {
                     "template_id": "AAq3wZkpfCpBZ",
-                    "template_version_name": "1.0.3",
+                    "template_version_name": "1.0.4",
                     "template_variable": {
                         "keyword": "${kw}",
+                        "total": "${num}",
                         "papers_list": ${json}
                     }
                 }

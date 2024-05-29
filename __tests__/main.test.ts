@@ -8,6 +8,9 @@
 
 import * as core from '@actions/core'
 import * as main from '../src/main'
+import * as dotenv from 'dotenv'
+
+dotenv.config({ path: ['.env.local'] })
 
 // Mock the action's main function
 const runMock = jest.spyOn(main, 'run')

@@ -14,7 +14,11 @@ describe('arxiv', () => {
   it('should return an array of ArXivPaper', async () => {
     const mockResponse = {
       data: `<?xml version="1.0" encoding = "UTF-8" ?>
-      <feed xmlns="http://www.w3.org/2005/Atom">
+      <feed xmlns="http://www.w3.org/2005/Atom">  
+      <updated>2024-05-28T00:00:00-04:00</updated>
+      <opensearch:totalResults xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">2</opensearch:totalResults>
+      <opensearch:startIndex xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">0</opensearch:startIndex>
+      <opensearch:itemsPerPage xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">2</opensearch:itemsPerPage>
         <entry>
           <id>http://arxiv.org/abs/2305.01234</id>
           <title>Paper 1</title>
@@ -36,14 +40,14 @@ describe('arxiv', () => {
     }
     mockedAxios.get.mockResolvedValueOnce(mockResponse)
 
-    const papers = await getArXivPapers(keyword)
+    const [num, papers] = await getArXivPapers(keyword)
     expect(mockedAxios.get).toHaveBeenCalledTimes(1)
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringMatching(
-        /http:\/\/export\.arxiv\.org\/api\/query\?search_query=all:\w+\+AND\+submittedDate=%5B(\d{12})\+TO\+(\d{12})%5D&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending/i
+        /http:\/\/export\.arxiv\.org\/api\/query\?search_query=all:\w+\+AND\+submittedDate:%5B(\d{12})\+TO\+(\d{12})%5D&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending/i
       )
     )
-
+    expect(num).toEqual('2')
     expect(papers).toHaveLength(2)
     expect(papers).toEqual([
       {
@@ -85,7 +89,7 @@ describe('arxiv', () => {
     expect(mockedAxios.get).toHaveBeenCalledTimes(1)
     expect(mockedAxios.get).toHaveBeenCalledWith(
       expect.stringMatching(
-        /http:\/\/export\.arxiv\.org\/api\/query\?search_query=all:\w+\+AND\+submittedDate=%5B(\d{12})\+TO\+(\d{12})%5D&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending/i
+        /http:\/\/export\.arxiv\.org\/api\/query\?search_query=all:\w+\+AND\+submittedDate:%5B(\d{12})\+TO\+(\d{12})%5D&start=0&max_results=10&sortBy=submittedDate&sortOrder=descending/i
       )
     )
   })
